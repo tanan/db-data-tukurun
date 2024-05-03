@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Button, Stack, TextField, MenuItem } from "@mui/material";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Column, dataTypes, defaultValue } from "./value";
@@ -40,7 +42,13 @@ const DatabaseSchemaForm = () => {
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
       {fields.map((field, index) => {
         return (
-          <Stack key={field.id} direction={"row"} spacing={1} my={1}>
+          <Stack
+            key={field.id}
+            direction={"row"}
+            spacing={1}
+            my={1}
+            justifyContent={"center"}
+          >
             <Controller
               name={`column.${index}.name`}
               control={control}
@@ -48,9 +56,11 @@ const DatabaseSchemaForm = () => {
               render={({ field, fieldState }) => (
                 <TextField
                   {...field}
+                  label={"name"}
                   placeholder={"name"}
                   error={fieldState.invalid}
                   helperText={fieldState.error?.message}
+                  size="small"
                 />
               )}
             />
@@ -59,7 +69,13 @@ const DatabaseSchemaForm = () => {
               name={`column.${index}.dataType`}
               control={control}
               render={({ field }) => (
-                <TextField {...field} id="dataType" label="dataType" select>
+                <TextField
+                  {...field}
+                  id="dataType"
+                  label="dataType"
+                  select
+                  size="small"
+                >
                   {dataTypes.map((item, index) => (
                     <MenuItem key={index} value={item}>
                       {item}
@@ -104,17 +120,23 @@ const DatabaseSchemaForm = () => {
         );
       })}
 
-      <Stack spacing={1}>
+      <Stack
+        direction={"row"}
+        spacing={1}
+        className="mx-auto"
+        my={3}
+        justifyContent={"center"}
+      >
         <Button
           variant="contained"
-          fullWidth
           onClick={handleSubmit(onSubmit)}
           disabled={!isValid}
+          className="md:w-24"
         >
           送信
         </Button>
 
-        <Button variant="outlined" fullWidth onClick={() => reset()}>
+        <Button variant="outlined" onClick={() => reset()} className="md:w-24">
           リセット
         </Button>
       </Stack>
