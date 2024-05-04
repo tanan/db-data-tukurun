@@ -9,6 +9,7 @@ import {
   ThemeProvider,
   CssBaseline,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import { GoFile, GoPlusCircle, GoTrash } from "react-icons/go";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -207,9 +208,22 @@ const DatabaseSchemaForm = () => {
             {isLoading ? "作成中..." : "送信"}
           </Button>
         </Stack>
+        {LoadingCircular(isLoading)}
         {FileDownloadLink(tableName, data, showData)}
       </Box>
     </ThemeProvider>
+  );
+};
+
+const LoadingCircular = (isLoading: boolean) => {
+  return (
+    <>
+      {isLoading && (
+        <div className="flex justify-center">
+          <CircularProgress size={30} />
+        </div>
+      )}
+    </>
   );
 };
 
