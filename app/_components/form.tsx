@@ -1,11 +1,20 @@
 "use client";
 
-import { Box, Button, Stack, TextField, MenuItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+  MenuItem,
+  ThemeProvider,
+  CssBaseline,
+} from "@mui/material";
 import { GoFile } from "react-icons/go";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Column, dataTypes, defaultValue } from "../../lib/value";
 import { GetDataFromGemini } from "@/lib/gemini";
 import { useState } from "react";
+import theme from "@/lib/theme";
 
 const DatabaseSchemaForm = () => {
   const [data, setData] = useState("");
@@ -49,7 +58,8 @@ const DatabaseSchemaForm = () => {
   const MAXIMUM_FIELDS = 10;
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Box
         className="my-8"
         component="form"
@@ -154,7 +164,7 @@ const DatabaseSchemaForm = () => {
         </Stack>
         {FileDownloadLink(data, showData)}
       </Box>
-    </>
+    </ThemeProvider>
   );
 };
 

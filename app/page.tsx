@@ -1,4 +1,7 @@
+import { ThemeProvider } from "@emotion/react";
 import DatabaseSchemaForm from "./_components/form";
+import theme from "../lib/theme";
+import { CssBaseline } from "@mui/material";
 
 export default function Home() {
   return (
