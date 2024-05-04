@@ -1,6 +1,7 @@
 "use client";
 
 import { Box, Button, Stack, TextField, MenuItem } from "@mui/material";
+import { GoFile } from "react-icons/go";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Column, dataTypes, defaultValue } from "../../lib/value";
 import { GetDataFromGemini } from "@/lib/gemini";
@@ -18,7 +19,6 @@ const DatabaseSchemaForm = () => {
   const {
     control,
     handleSubmit,
-    reset,
     formState: { isValid },
   } = useForm<FormValues>({
     mode: "onTouched",
@@ -40,19 +40,6 @@ const DatabaseSchemaForm = () => {
     setIsLoading(false);
   };
 
-  const handleDownload = () => {
-    const blob = new Blob([data], { type: "text/plain" });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "data.txt";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  };
-
   const validationRules = {
     name: {
       required: "Name is required",
@@ -63,7 +50,12 @@ const DatabaseSchemaForm = () => {
 
   return (
     <>
-      <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        className="my-8"
+        component="form"
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {fields.map((field, index) => {
           return (
             <Stack
@@ -157,23 +149,39 @@ const DatabaseSchemaForm = () => {
             disabled={!isValid}
             className="md:w-24"
           >
-            {isLoading ? "送信中..." : "送信"}
-          </Button>
-
-          <Button
-            variant="outlined"
-            onClick={() => reset()}
-            className="md:w-24"
-          >
-            リセット
+            {isLoading ? "作成中..." : "送信"}
           </Button>
         </Stack>
+        {FileDownloadLink(data, showData)}
       </Box>
-      <div hidden={!showData}>
-        <Button variant="outlined" onClick={handleDownload} className="md:w-30">
-          ダウンロード
-        </Button>
-      </div>
+    </>
+  );
+};
+
+const FileDownloadLink = (data: string, showData: boolean) => {
+  const handleDownload = () => {
+    const blob = new Blob([data], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+  return (
+    <>
+      {showData && (
+        <div
+          onClick={handleDownload}
+          className="flex flex-row items-center justify-center mx-auto cursor-pointer hover:opacity-60"
+        >
+          <GoFile size={24} />
+          <span className="mx-2 text-sm text-gray-600">data.txt</span>
+        </div>
+      )}
     </>
   );
 };
