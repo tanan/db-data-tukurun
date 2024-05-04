@@ -8,6 +8,7 @@ import {
   MenuItem,
   ThemeProvider,
   CssBaseline,
+  Divider,
 } from "@mui/material";
 import { GoFile, GoPlusCircle, GoTrash } from "react-icons/go";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -66,6 +67,7 @@ const DatabaseSchemaForm = () => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
+        <Divider variant="middle" className="w-2/3 mx-auto my-8" />
         {fields.map((field, index) => {
           return (
             <Stack
