@@ -9,7 +9,7 @@ import {
   ThemeProvider,
   CssBaseline,
 } from "@mui/material";
-import { GoFile } from "react-icons/go";
+import { GoFile, GoPlusCircle, GoTrash } from "react-icons/go";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { Column, dataTypes, defaultValue } from "../../lib/value";
 import { GetDataFromGemini } from "@/lib/gemini";
@@ -101,9 +101,25 @@ const DatabaseSchemaForm = () => {
                     label="dataType"
                     select
                     size="small"
+                    sx={{
+                      width: 120,
+                    }}
+                    InputProps={{
+                      style: {
+                        fontSize: 12,
+                        paddingTop: 3.4,
+                        paddingBottom: 3.4,
+                      },
+                    }}
                   >
                     {dataTypes.map((item, index) => (
-                      <MenuItem key={index} value={item}>
+                      <MenuItem
+                        key={index}
+                        value={item}
+                        sx={{
+                          fontSize: 12,
+                        }}
+                      >
                         {item}
                       </MenuItem>
                     ))}
@@ -111,23 +127,23 @@ const DatabaseSchemaForm = () => {
                 )}
               />
 
-              <Button
-                variant="contained"
-                onClick={() => insert(index + 1, defaultValue)}
-                disabled={fields.length >= MAXIMUM_FIELDS}
+              <div
+                onClick={() => {
+                  insert(index + 1, defaultValue);
+                }}
+                className="flex flex-row items-center justify-center cursor-pointer hover:opacity-60"
               >
-                追加
-              </Button>
+                <GoPlusCircle size={24} />
+              </div>
 
-              <Button
-                variant="outlined"
+              <div
                 onClick={() => remove(index)}
-                disabled={fields.length === 1}
+                className="flex flex-row items-center justify-center cursor-pointer hover:opacity-60"
               >
-                削除
-              </Button>
+                <GoTrash size={24} />
+              </div>
 
-              <Button
+              {/* <Button
                 variant="contained"
                 onClick={() => move(index, index + 1)}
                 disabled={fields.length <= index + 1}
@@ -141,7 +157,7 @@ const DatabaseSchemaForm = () => {
                 disabled={!index}
               >
                 ↑
-              </Button>
+              </Button> */}
             </Stack>
           );
         })}
