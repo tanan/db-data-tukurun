@@ -4,7 +4,7 @@ export type Column = {
   sampleData?: string;
 };
 
-export const defaultValue: Column = { name: "name", dataType: "VARCHAR" };
+export const defaultValue: Column = { name: "", dataType: "VARCHAR" };
 
 export const dataTypes = [
   "INT",

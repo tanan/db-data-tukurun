@@ -18,11 +18,13 @@ import { useState } from "react";
 import theme from "@/lib/theme";
 
 const DatabaseSchemaForm = () => {
+  const [tableName, setTableName] = useState("");
   const [data, setData] = useState("");
   const [showData, setShowData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   type FormValues = {
+    tableName: string;
     columns: Column[];
   };
 
@@ -33,6 +35,7 @@ const DatabaseSchemaForm = () => {
   } = useForm<FormValues>({
     mode: "onTouched",
     defaultValues: {
+      tableName: "",
       columns: [defaultValue],
     },
   });
@@ -44,7 +47,8 @@ const DatabaseSchemaForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
-    const text = await GetDataFromGemini(data.columns);
+    setTableName(data.tableName);
+    const text = await GetDataFromGemini(data.tableName, data.columns);
     setData(text);
     setShowData(true);
     setIsLoading(false);
@@ -67,6 +71,29 @@ const DatabaseSchemaForm = () => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}
       >
+        <Stack
+          spacing={1}
+          my={1}
+          justifyContent={"center"}
+          className="w-2/3 md:w-1/2 mx-auto"
+        >
+          <span className="text-md font-semibold">テーブル名</span>
+          <Controller
+            name={`tableName`}
+            control={control}
+            rules={validationRules.name}
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                label={"name"}
+                placeholder={"table_name"}
+                error={fieldState.invalid}
+                helperText={fieldState.error?.message}
+                size="small"
+              />
+            )}
+          />
+        </Stack>
         <Divider variant="middle" className="w-2/3 mx-auto my-8" />
         {fields.map((field, index) => {
           return (
@@ -180,20 +207,24 @@ const DatabaseSchemaForm = () => {
             {isLoading ? "作成中..." : "送信"}
           </Button>
         </Stack>
-        {FileDownloadLink(data, showData)}
+        {FileDownloadLink(tableName, data, showData)}
       </Box>
     </ThemeProvider>
   );
 };
 
-const FileDownloadLink = (data: string, showData: boolean) => {
+const FileDownloadLink = (
+  tableName: string,
+  data: string,
+  showData: boolean
+) => {
   const handleDownload = () => {
     const blob = new Blob([data], { type: "text/plain" });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "data.txt";
+    a.download = `${tableName}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -207,7 +238,7 @@ const FileDownloadLink = (data: string, showData: boolean) => {
           className="flex flex-row items-center justify-center mx-auto cursor-pointer hover:opacity-60"
         >
           <GoFile size={24} />
-          <span className="mx-2 text-sm text-gray-600">data.txt</span>
+          <span className="mx-2 text-sm text-gray-600">{tableName}.csv</span>
         </div>
       )}
     </>
