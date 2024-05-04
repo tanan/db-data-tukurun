@@ -1,7 +1,7 @@
 This is a db record generator in a csv format.
 In this app, a user inputs table definition, and then request to Gemini API to generate dummy data for the table.
 
-<img src="screenshot.png" width="300">
+<img src="screenshot.png" width="600">
 
 ## Usage
 
